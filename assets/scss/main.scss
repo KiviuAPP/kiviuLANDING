@@ -92,6 +92,10 @@ p {
                 width: 120px;
             }
 
+            h5 {
+                width: 100%;
+            }
+
             &__buttons {
                 a {
                     font-weight: 500;
@@ -117,6 +121,7 @@ p {
             margin-top: -100px;
 
             img {
+                width: 100%;
                 border-radius: 8px;
             }
         }
@@ -127,6 +132,119 @@ main {
     h2 {
         color: $blue-500;
         font-weight: 600;
+    }
+
+    .titleBG {
+        font-size: 1rem;
+        display: inline-block;
+        color: #fff;
+        border-radius: 100px;
+        background-color: $blue-500;
+        padding: 12px 24px;
+    }
+
+    .servicioNormas {
+        margin-top: 60px;
+
+        &__titulo {
+            i {
+                font-size: 28px;
+                color: $blue-500;
+            }
+
+            h5 {
+                color: $blue-500;
+                font-weight: 600;
+            }
+        }
+
+        &__texto {
+            margin-left: 44px;
+
+            p {
+                width: 100%;
+            }
+
+            h6 {
+                color: $blue-500;
+                font-weight: 600;
+            }
+
+            &__lista {
+                i {
+                    font-size: 20px;
+                    color: $blue-500;
+                }
+            }
+        }
+    }
+
+    .sliderNormas {
+        margin-bottom: 60px;
+
+        .logo-slider {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            width: 100%;
+            padding: 20px 0;
+            background: #fff;
+        }
+
+        .logo-track {
+            display: inline-flex;
+            animation: scroll 30s linear infinite;
+        }
+
+        .logo-track img {
+            height: 60px;
+            margin: 0 20px;
+            flex-shrink: 0;
+            transition: 0.3s;
+        }
+
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+    }
+
+    .servicios {
+        margin-bottom: 100px;
+
+        &__grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+
+            &__item {
+                background-color: #fff;
+
+                &__text {
+                    width: 100%;
+
+                    i {
+                        font-size: 28px;
+                        color: $blue-500;
+                    }
+
+                    h5 {
+                        color: $blue-500;
+                    }
+                }
+
+                &__img {
+                    width: 100%;
+
+                    img {
+                        width: 100%;
+                        height: auto;
+                        border-radius: 8px;
+                    }
+                }
+            }
+        }
     }
 
     .objetivos {
@@ -408,16 +526,17 @@ main {
 
 .contact__footer {
     &--container {
-        background-color: $primary;
-        padding-top: 30px;
-        padding-bottom: 30px;
+        // background-color: $primary;
+        // padding-top: 30px;
+        // padding-bottom: 30px;
 
         .contact {
-            margin-bottom: 120px;
+            margin-bottom: 100px;
 
             &__info {
                 h2 {
                     font-weight: 600;
+                    color: $blue-500;
                 }
 
                 &__icono {
@@ -438,6 +557,10 @@ main {
         }
 
         footer {
+            background-color: $primary;
+            padding-top: 30px;
+            padding-bottom: 30px;
+
             .footer__info {
                 margin-bottom: 30px;
 
@@ -477,7 +600,54 @@ main {
 
 // breakpoint sm
 @media screen and (min-width: 768px) {
+
+    .navbar__banner {
+        .navbar__banner--container {
+            .banner__info {
+                h5 {
+                    width: 75%;
+                }
+            }
+        }
+
+        .banner__img {
+            .banner__img--container {
+                width: 75%;
+            }
+            
+        }
+    }
+
     main {
+        .titleBG {
+            font-size: 1.4rem;
+        }
+
+        .servicioNormas {
+            &__texto {
+                p {
+                    width: 75%;
+                }
+            }
+        }
+
+        .sliderNormas {
+            margin-bottom: 100px;
+
+            .logo-track img {
+                height: 92px;
+                margin: 0 40px;
+            }
+        }
+
+        .servicios {
+            &__grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 60px;
+            }
+        }
+
         .testimoniales {
             &__info {
                 &__textos {
@@ -500,7 +670,7 @@ main {
 
     .navbar__banner {
         .navbar__banner--container {
-            padding-bottom: 300px;
+            // padding-bottom: 300px;
             margin: 16px;
             border-radius: 16px;
 
@@ -518,6 +688,10 @@ main {
                 padding-top: 80px;
                 // padding-bottom: 80px;
 
+                h5 {
+                    width: 50%;
+                }
+
                 &__isotipo {
                     width: 180px;
                 }
@@ -528,8 +702,8 @@ main {
             padding-bottom: 120px;
 
             .banner__img--container {
-                width: 75%;
-                margin-top: -300px;
+                width: 50%;
+                // margin-top: -300px;
 
                 img {
                     border-radius: 16px;
@@ -539,6 +713,14 @@ main {
     }
 
     main {
+        .servicios {
+            margin-bottom: 200px;
+
+            &__grid {
+                gap: 100px;
+            }
+        }
+
         .objetivos {
             margin-bottom: 120px;
 
@@ -550,7 +732,7 @@ main {
                 }
 
                 &__textos {
-                    width: 45%;
+                    width: 50%;
 
                     &__item {
                         border-radius: 16px;
@@ -558,7 +740,7 @@ main {
                 }
 
                 &__img {
-                    width: 55%;
+                    width: 50%;
                     position: relative;
                     align-items: inherit;
 
@@ -640,8 +822,6 @@ main {
         &--container {
             margin: 16px;
             border-radius: 16px;
-            padding-top: 80px;
-            // padding-bottom: 80px;
 
             .contact {
                 gap: 40px;
@@ -656,6 +836,10 @@ main {
             }
 
             footer {
+                padding-top: 60px;
+                padding-bottom: 60px;
+                border-radius: 16px;
+
                 .footer__info {
                     margin-bottom: 80px;
 
