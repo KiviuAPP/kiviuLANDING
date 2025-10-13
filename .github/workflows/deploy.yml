@@ -33,19 +33,27 @@ jobs:
             
             cd /srv/deploys/kiviuLANDING
             
+            # Fix ownership issues - restore everything to ec2-user first
+            echo "🔓 Fixing ownership..."
+            sudo chown -R ec2-user:ec2-user .
+            
+            # Configure git safe directory
+            git config --global --add safe.directory /srv/deploys/kiviuLANDING
+            
             # Show current status
             echo "📍 Current directory: $(pwd)"
-            echo "📍 Current branch: $(git branch --show-current)"
+            echo "� PCurrent branch: $(git branch --show-current)"
             
-            # Reset any local changes and pull
+            # Discard any local changes and pull
             echo "📥 Pulling latest changes..."
             git fetch origin
-            git reset --hard origin/main || git reset --hard origin/master
+            git reset --hard origin/main 2>/dev/null || git reset --hard origin/master
+            git clean -fd
             
-            # Set permissions for nginx (UID 101 in nginx:alpine)
-            echo "🔒 Setting permissions..."
-            sudo chown -R 101:101 .
-            sudo chmod -R 755 .
+            # Set permissions for nginx (UID 101 in nginx:alpine) - only for web files
+            echo "🔒 Setting permissions for nginx..."
+            sudo chown -R 101:101 index.html assets 2>/dev/null || true
+            sudo chmod -R 755 index.html assets 2>/dev/null || true
             
             # Reload nginx container
             # echo "🔄 Reloading nginx..."
