@@ -32,6 +32,7 @@ jobs:
             fi
             
             cd /srv/deploys/kiviuLANDING
+            sudo chown -R ec2-user:ec2-user .git
             
             # Fix ownership issues - restore everything to ec2-user first
             echo "🔓 Fixing ownership..."
@@ -57,8 +58,8 @@ jobs:
             
             # Reload nginx container
             # echo "🔄 Reloading nginx..."
-            # cd /srv/deploys/kiviu/server/deploy
-            # sudo docker-compose exec -T nginx nginx -s reload || echo "⚠️  Nginx reload skipped (container may need restart)"
+            cd /srv/deploys/kiviu/server/deploy
+            docker-compose exec -T nginx nginx -s reload || echo "⚠️  Nginx reload skipped (container may need restart)"
             
             echo "✅ Landing deployed successfully "
             echo "🌐 Landing available at: https://www.kiviu.com and https://kiviu.com"
