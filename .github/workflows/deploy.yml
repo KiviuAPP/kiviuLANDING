@@ -32,6 +32,7 @@ jobs:
             fi
             
             cd /srv/deploys/kiviuLANDING
+            sudo chown -R ec2-user:ec2-user .git
             
             # Show current status
             echo "📍 Current directory: $(pwd)"
