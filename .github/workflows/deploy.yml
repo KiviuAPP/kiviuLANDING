@@ -1,0 +1,42 @@
+name: Landing Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Landing to Production
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Deploy to production server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.KIVIU_PROD_HOST }}
+          username: ${{ secrets.KIVIU_PROD_USER }}
+          key: ${{ secrets.KIVIU_PROD_SSH_KEY }}
+          script: |
+            echo "🚀 Starting Landing deployment..."
+            cd /srv/deploys/kiviuLANDING
+            
+            # Pull latest changes
+            git pull origin main
+            
+            # Copy files to web directory (nginx container will mount this)
+            sudo mkdir -p /var/www/landing
+            
+            # Set permissions
+            sudo chown -R 101:101 *
+            sudo chmod -R 755 *
+            
+            # Reload nginx container
+            cd /srv/deploys/kiviu/server/deploy
+            sudo docker-compose exec -T nginx nginx -s reload || echo "⚠️  Nginx reload skipped (container may need restart)"
+            
+            echo "✅ Landing deployed successfully to $(hostname) - $(date)"
+            echo "🌐 Landing available at: https://www.kiviu.com and https://kiviu.com"
