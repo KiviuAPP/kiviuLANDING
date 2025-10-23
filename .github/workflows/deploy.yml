@@ -1,0 +1,65 @@
+name: Landing Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Landing to Production
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Deploy to production server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.KIVIU_PROD_HOST }}
+          username: ${{ secrets.KIVIU_PROD_USER }}
+          key: ${{ secrets.KIVIU_PROD_SSH_KEY }}
+          script: |
+            echo "🚀 Starting Landing deployment..."
+            
+            # Check if directory exists
+            if [ ! -d "/srv/deploys/kiviuLANDING" ]; then
+              echo "❌ Directory /srv/deploys/kiviuLANDING does not exist"
+              echo "Please clone the repository first:"
+              echo "  cd /srv/deploys && git clone <repo-url> kiviuLANDING"
+              exit 1
+            fi
+            
+            cd /srv/deploys/kiviuLANDING
+            sudo chown -R ec2-user:ec2-user .git
+            
+            # Fix ownership issues - restore everything to ec2-user first
+            echo "🔓 Fixing ownership..."
+            sudo chown -R ec2-user:ec2-user .
+            
+            # Configure git safe directory
+            git config --global --add safe.directory /srv/deploys/kiviuLANDING
+            
+            # Show current status
+            echo "📍 Current directory: $(pwd)"
+            echo "� PCurrent branch: $(git branch --show-current)"
+            
+            # Discard any local changes and pull
+            echo "📥 Pulling latest changes..."
+            git fetch origin
+            git reset --hard origin/main 2>/dev/null || git reset --hard origin/master
+            git clean -fd
+            
+            # Set permissions for nginx (UID 101 in nginx:alpine) - only for web files
+            echo "🔒 Setting permissions for nginx..."
+            sudo chown -R 101:101 index.html assets 2>/dev/null || true
+            sudo chmod -R 755 index.html assets 2>/dev/null || true
+            
+            # Reload nginx container
+            # echo "🔄 Reloading nginx..."
+            cd /srv/deploys/kiviu/server/deploy
+            docker-compose exec -T nginx nginx -s reload || echo "⚠️  Nginx reload skipped (container may need restart)"
+            
+            echo "✅ Landing deployed successfully "
+            echo "🌐 Landing available at: https://www.kiviu.com and https://kiviu.com"
